@@ -1,6 +1,7 @@
 {
-    module Parser where 
-    import lexer.x
+    module Parser (parser) where 
+    import Langdef
+    import Lexer
 }
 
 %name Parser
@@ -19,6 +20,7 @@
     '('      {lexer.LParen}
     ')'      {lexer.RParen}
     '=='     {lexer.Equals}
+    '='      {lexer.Eq}
     '&&'     {lexer.And}
     '||'     {lexer.Or}
     '+'      {lexer.Plus}
@@ -31,91 +33,65 @@
     true     {lexer.True}
     false    {lexer.False}
     const    {lexer.Const}
+    type     {lexer.Type}
 
 
 %%
 
-Spec : Decl {Decl $1}
-     | Express  {Expr $1}
+Spec : Decl                         {DataLang.Decl $1}
+     | Expr                         {DataLang.Expr $1}
 
-Decl : const name '=' Expr {VarConst $2 $4}
-     | fct Type name '(' Tuples ')' {Fct $2 $3 $5}
-     | fct Type name '('')'         {Fct $2 [] $5}
+Decl : const name '=' Expr          {DataLang.VarConst $2 $4}
+     | type name '(' Tuples ')' {DataLang.Fct $1 $2 $4}
+     | type name '('')'         {DataLang.Fct $1 $2 []}
 
-Expr    : Factor             {Factor $1}
-        | name               {Ref $1}
-        | fct '(' Tuples ')' {AppFonction $2 $4}
-        | Parenth            {$1}
+Expr    : Factor                    {DataLang.Factor $1}
+        | name                      {DataLang.Ref $1}
+        | name '(' Arg ')'           {DataLang.AppFonction $1 $3}
+        | name '(' ')'               {DataLang.AppFonction $1 []}
+        | '(' Arg ')'           {$1}
+        | Op                        {$1}
+
+Arg     : Expr {[$1]}
+        | Expr ',' Arg {$1:$3}
 
 
-Parenth : '(' Express ')' {Parenth $2}
-        | '(' Cond ')'    {Parenth $2}
+Exp : let name '=' Exp in Exp {DataLang.Let $2 $4 $6}
+    | Expr                    {DataLang.Expr $1 }
 
+--IfThenElse : if '(' Cond ')' then smth {DataLang.If $3 $6}
+--           | if '(' Cond ')' then smth else smthelse {DataLang.If $3 $6 $8}
 
-Exp : let name '=' Exp in Exp {Let $2 $4 $6}
-    | Expr                   { Expr $1 }
-
-IfThenElse : if '(' Cond ')' then smth {If $3 $6}
-           | if '(' Cond ')' then smth else smthelse {If $3 $6 $8}
-
-Cond : Cond '||' Cond {Or $1 $3}
-     | Cond '&&' Cond {And $1 $3}
-     | Cond '==' Cond {Equals $1 $3}
-     | true           {Bool $1}
-     | false          {Bool $1}
-     | Factor         {Factor $1}
-
-Tuples : Tuples ',' Expr {Expr $3}
-       | Expr {Expr $1}
-
-Term : Term '+' Term {Plus $1 $3}
-     | Term '-' Term {Minus $1 $3}
-     | Term '*' Term {Mult $1 $3}
-     | Term '/' Term {Div $1 $3}
-     | Factor '++'   {Plusplus $1}
-     | Factor '--'   {MinusMinus $1}
+Op   : Op '+' Op     {DataLang.OperatorUnary DataLang.Plus $1 $3}
+     | Op '-' Op     {DataLang.OperatorUnary DataLang.Minus $1 $3}
+     | Op '*' Op     {DataLang.OperatorUnary DataLang.Mult $1 $3}
+     | Op '||' Op    {DataLang.OperatorUnary DataLang.Or $1 $3}
+     | Op '&&' Op    {DataLang.OperatorUnary DataLang.And $1 $3}
+     | Op '==' Op    {DataLang.OperatorUnary DataLang.Equals $1 $3}
+     | Op '/' Op     {DataLang.OperatorUnary DataLang.Divide $1 $3}
+     | Factor '++'   {DataLang.OperatorBinary DataLang.Plusplus $1}
+     | Factor '--'   {DataLang.OperatorBinary DataLang.Minusminus $1}
      | Factor        {Factor $1}
 
 Lit : Factor {Factor $1}
     | '(' Tuples ')' {Tuples $1}
 
-Factor : int {Int $1}
-       | bool {Bool $1}
+Tuples : Expr ',' Tuples {$1:$3}
+       | Expr ',' Expr {[$1]++[$3]}
 
-
+Factor : int {DataLang.TypeInt $1}
+       | bool {DataLang.TypeBool $1}
 
     {
         parseError :: [Token] -> a
         parseError _ = error "parsing error"
     }
 
-Type Name = String
-
-data Spec 
-    = Decl declaration 
-    | Expr expression
-    deriving (Show)
-
-data Decl 
-    = Var Const (Name) 
-    | Fct Type [Expr]
-
-data Expr
-    = Litteral 
-    | Ref String
-    | AppFonction
-    | Brack
-    | Let 
-    | Pattern
-    | OpUnair Expr
-    | OpBin Expr Expr 
-    | OpComp Expr Expr 
 
 
 
 
-data Lit
-    = 
+
 
 
 

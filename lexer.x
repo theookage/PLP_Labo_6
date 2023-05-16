@@ -20,11 +20,12 @@ tokens :-
     "-"                { \_ -> Minus }
     "++"               { \_ -> Plusplus}
     int | bool         { \_ -> Type}
-    "--"               {\_ -> MinusMinus}
+    "--"               {\_ -> Minusminus}
     "*"                { \_ -> Mult }
     "/"                { \_ -> Divide }
     "("                { \_ -> LParen }
     ")"                { \_ -> RParen }
+    "="                { \_ -> Eq}
     ","                { \_ -> Comma }
     "if"               { \_ -> If }
     "then"             { \_ -> Then }
@@ -54,6 +55,7 @@ data Token
   | Then 
   | Else
   | Equals              -- Opérateur d'égalité
+  | Eq
   | Plus                -- Opérateur d'addition
   | Minus               -- Opérateur de soustraction
   | Mult               -- Opérateur de multiplication
