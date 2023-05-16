@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -w #-}
-module Parser (parser) where 
-    import Langdef
-    import Lexer
+module Parser  where 
+import Lexer
+import qualified Langdef
 import qualified Data.Array as Happy_Data_Array
 import qualified Data.Bits as Bits
 import Control.Applicative(Applicative(..))
@@ -29,7 +29,7 @@ happyExpList = Happy_Data_Array.listArray (0,117) ([28672,16,24,0,1536,0,0,16384
 {-# NOINLINE happyExpListPerState #-}
 happyExpListPerState st =
     token_strs_expected
-  where token_strs = ["error","%dummy","%start_Parser","Spec","Decl","Expr","Arg","Exp","Op","Lit","Tuples","Factor","name","int","bool","let","in","if","then","else","'('","')'","'=='","'='","'&&'","'||'","'+'","'-'","'++'","'--'","'*'","'/'","','","true","false","const","type","%eof"]
+  where token_strs = ["error","%dummy","%start_parser","Spec","Decl","Expr","Arg","Exp","Op","Lit","Tuples","Factor","name","int","bool","let","in","if","then","else","'('","')'","'=='","'='","'&&'","'||'","'+'","'-'","'++'","'--'","'*'","'/'","','","true","false","const","type","%eof"]
         bit_start = st Prelude.* 38
         bit_end = (st Prelude.+ 1) Prelude.* 38
         read_bit = readArrayBit happyExpList
@@ -310,59 +310,59 @@ action_50 _ = happyReduce_28
 happyReduce_1 = happySpecReduce_1  4 happyReduction_1
 happyReduction_1 (HappyAbsSyn5  happy_var_1)
 	 =  HappyAbsSyn4
-		 (DataLang.Decl happy_var_1
+		 (Langdef.Decl happy_var_1
 	)
 happyReduction_1 _  = notHappyAtAll 
 
 happyReduce_2 = happySpecReduce_1  4 happyReduction_2
 happyReduction_2 (HappyAbsSyn6  happy_var_1)
 	 =  HappyAbsSyn4
-		 (DataLang.Expr happy_var_1
+		 (Langdef.Expr happy_var_1
 	)
 happyReduction_2 _  = notHappyAtAll 
 
 happyReduce_3 = happyReduce 4 5 happyReduction_3
 happyReduction_3 ((HappyAbsSyn6  happy_var_4) `HappyStk`
 	_ `HappyStk`
-	(HappyTerminal (lexer.name happy_var_2)) `HappyStk`
+	(HappyTerminal (Name happy_var_2)) `HappyStk`
 	_ `HappyStk`
 	happyRest)
 	 = HappyAbsSyn5
-		 (DataLang.VarConst happy_var_2 happy_var_4
+		 (Langdef.VarConst happy_var_2 happy_var_4
 	) `HappyStk` happyRest
 
 happyReduce_4 = happyReduce 5 5 happyReduction_4
 happyReduction_4 (_ `HappyStk`
 	(HappyAbsSyn11  happy_var_4) `HappyStk`
 	_ `HappyStk`
-	(HappyTerminal (lexer.name happy_var_2)) `HappyStk`
+	(HappyTerminal (Name happy_var_2)) `HappyStk`
 	(HappyTerminal happy_var_1) `HappyStk`
 	happyRest)
 	 = HappyAbsSyn5
-		 (DataLang.Fct happy_var_1 happy_var_2 happy_var_4
+		 (Langdef.Fct happy_var_1 happy_var_2 happy_var_4
 	) `HappyStk` happyRest
 
 happyReduce_5 = happyReduce 4 5 happyReduction_5
 happyReduction_5 (_ `HappyStk`
 	_ `HappyStk`
-	(HappyTerminal (lexer.name happy_var_2)) `HappyStk`
+	(HappyTerminal (Name happy_var_2)) `HappyStk`
 	(HappyTerminal happy_var_1) `HappyStk`
 	happyRest)
 	 = HappyAbsSyn5
-		 (DataLang.Fct happy_var_1 happy_var_2 []
+		 (Langdef.Fct happy_var_1 happy_var_2 []
 	) `HappyStk` happyRest
 
 happyReduce_6 = happySpecReduce_1  6 happyReduction_6
 happyReduction_6 (HappyAbsSyn12  happy_var_1)
 	 =  HappyAbsSyn6
-		 (DataLang.Factor happy_var_1
+		 (Langdef.Litteral happy_var_1
 	)
 happyReduction_6 _  = notHappyAtAll 
 
 happyReduce_7 = happySpecReduce_1  6 happyReduction_7
-happyReduction_7 (HappyTerminal (lexer.name happy_var_1))
+happyReduction_7 (HappyTerminal (Name happy_var_1))
 	 =  HappyAbsSyn6
-		 (DataLang.Ref happy_var_1
+		 (Langdef.Ref happy_var_1
 	)
 happyReduction_7 _  = notHappyAtAll 
 
@@ -370,18 +370,18 @@ happyReduce_8 = happyReduce 4 6 happyReduction_8
 happyReduction_8 (_ `HappyStk`
 	(HappyAbsSyn7  happy_var_3) `HappyStk`
 	_ `HappyStk`
-	(HappyTerminal (lexer.name happy_var_1)) `HappyStk`
+	(HappyTerminal (Name happy_var_1)) `HappyStk`
 	happyRest)
 	 = HappyAbsSyn6
-		 (DataLang.AppFonction happy_var_1 happy_var_3
+		 (Langdef.AppFonction happy_var_1 happy_var_3
 	) `HappyStk` happyRest
 
 happyReduce_9 = happySpecReduce_3  6 happyReduction_9
 happyReduction_9 _
 	_
-	(HappyTerminal (lexer.name happy_var_1))
+	(HappyTerminal (Name happy_var_1))
 	 =  HappyAbsSyn6
-		 (DataLang.AppFonction happy_var_1 []
+		 (Langdef.AppFonction happy_var_1 []
 	)
 happyReduction_9 _ _ _  = notHappyAtAll 
 
@@ -422,17 +422,17 @@ happyReduction_14 ((HappyAbsSyn8  happy_var_6) `HappyStk`
 	_ `HappyStk`
 	(HappyAbsSyn8  happy_var_4) `HappyStk`
 	_ `HappyStk`
-	(HappyTerminal (lexer.name happy_var_2)) `HappyStk`
+	(HappyTerminal (Name happy_var_2)) `HappyStk`
 	_ `HappyStk`
 	happyRest)
 	 = HappyAbsSyn8
-		 (DataLang.Let happy_var_2 happy_var_4 happy_var_6
+		 (Langdef.Let happy_var_2 happy_var_4 happy_var_6
 	) `HappyStk` happyRest
 
 happyReduce_15 = happySpecReduce_1  8 happyReduction_15
 happyReduction_15 (HappyAbsSyn6  happy_var_1)
 	 =  HappyAbsSyn8
-		 (DataLang.Expr happy_var_1
+		 (Langdef.Expr happy_var_1
 	)
 happyReduction_15 _  = notHappyAtAll 
 
@@ -441,7 +441,7 @@ happyReduction_16 (HappyAbsSyn9  happy_var_3)
 	_
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorUnary DataLang.Plus happy_var_1 happy_var_3
+		 (Langdef.OperatorUnary Langdef.Plus happy_var_1 happy_var_3
 	)
 happyReduction_16 _ _ _  = notHappyAtAll 
 
@@ -450,7 +450,7 @@ happyReduction_17 (HappyAbsSyn9  happy_var_3)
 	_
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorUnary DataLang.Minus happy_var_1 happy_var_3
+		 (Langdef.OperatorUnary Langdef.Minus happy_var_1 happy_var_3
 	)
 happyReduction_17 _ _ _  = notHappyAtAll 
 
@@ -459,7 +459,7 @@ happyReduction_18 (HappyAbsSyn9  happy_var_3)
 	_
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorUnary DataLang.Mult happy_var_1 happy_var_3
+		 (Langdef.OperatorUnary Langdef.Mult happy_var_1 happy_var_3
 	)
 happyReduction_18 _ _ _  = notHappyAtAll 
 
@@ -468,7 +468,7 @@ happyReduction_19 (HappyAbsSyn9  happy_var_3)
 	_
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorUnary DataLang.Or happy_var_1 happy_var_3
+		 (Langdef.OperatorUnary Langdef.Or happy_var_1 happy_var_3
 	)
 happyReduction_19 _ _ _  = notHappyAtAll 
 
@@ -477,7 +477,7 @@ happyReduction_20 (HappyAbsSyn9  happy_var_3)
 	_
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorUnary DataLang.And happy_var_1 happy_var_3
+		 (Langdef.OperatorUnary Langdef.And happy_var_1 happy_var_3
 	)
 happyReduction_20 _ _ _  = notHappyAtAll 
 
@@ -486,7 +486,7 @@ happyReduction_21 (HappyAbsSyn9  happy_var_3)
 	_
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorUnary DataLang.Equals happy_var_1 happy_var_3
+		 (Langdef.OperatorUnary Langdef.Equals happy_var_1 happy_var_3
 	)
 happyReduction_21 _ _ _  = notHappyAtAll 
 
@@ -495,7 +495,7 @@ happyReduction_22 (HappyAbsSyn9  happy_var_3)
 	_
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorUnary DataLang.Divide happy_var_1 happy_var_3
+		 (Langdef.OperatorUnary Langdef.Divide happy_var_1 happy_var_3
 	)
 happyReduction_22 _ _ _  = notHappyAtAll 
 
@@ -503,7 +503,7 @@ happyReduce_23 = happySpecReduce_2  9 happyReduction_23
 happyReduction_23 _
 	(HappyAbsSyn12  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorBinary DataLang.Plusplus happy_var_1
+		 (Langdef.OperatorBinary Langdef.PlusPlus happy_var_1
 	)
 happyReduction_23 _ _  = notHappyAtAll 
 
@@ -511,7 +511,7 @@ happyReduce_24 = happySpecReduce_2  9 happyReduction_24
 happyReduction_24 _
 	(HappyAbsSyn12  happy_var_1)
 	 =  HappyAbsSyn9
-		 (DataLang.OperatorBinary DataLang.Minusminus happy_var_1
+		 (Langdef.OperatorBinary Langdef.MinusMinus happy_var_1
 	)
 happyReduction_24 _ _  = notHappyAtAll 
 
@@ -557,16 +557,16 @@ happyReduction_29 (HappyAbsSyn6  happy_var_3)
 happyReduction_29 _ _ _  = notHappyAtAll 
 
 happyReduce_30 = happySpecReduce_1  12 happyReduction_30
-happyReduction_30 (HappyTerminal (lexer.Int happy_var_1))
+happyReduction_30 (HappyTerminal (Int happy_var_1))
 	 =  HappyAbsSyn12
-		 (DataLang.TypeInt happy_var_1
+		 (Langdef.TypeInt happy_var_1
 	)
 happyReduction_30 _  = notHappyAtAll 
 
 happyReduce_31 = happySpecReduce_1  12 happyReduction_31
 happyReduction_31 (HappyTerminal happy_var_1)
 	 =  HappyAbsSyn12
-		 (DataLang.TypeBool happy_var_1
+		 (Langdef.TypeBool happy_var_1
 	)
 happyReduction_31 _  = notHappyAtAll 
 
@@ -576,31 +576,31 @@ happyNewToken action sts stk [] =
 happyNewToken action sts stk (tk:tks) =
 	let cont i = action i i tk (HappyState action) sts stk tks in
 	case tk of {
-	lexer.name happy_dollar_dollar -> cont 13;
-	lexer.Int happy_dollar_dollar -> cont 14;
-	lexer.Bool -> cont 15;
-	lexer.Let -> cont 16;
-	lexer.In -> cont 17;
-	lexer.If -> cont 18;
-	lexer.Then -> cont 19;
-	lexer.Else -> cont 20;
-	lexer.LParen -> cont 21;
-	lexer.RParen -> cont 22;
-	lexer.Equals -> cont 23;
-	lexer.Eq -> cont 24;
-	lexer.And -> cont 25;
-	lexer.Or -> cont 26;
-	lexer.Plus -> cont 27;
-	lexer.Minus -> cont 28;
-	lexer.Plusplus -> cont 29;
-	lexer.Minusminus -> cont 30;
-	lexer.Mult -> cont 31;
-	lexer.Divide -> cont 32;
-	lexer.Comma -> cont 33;
-	lexer.True -> cont 34;
-	lexer.False -> cont 35;
-	lexer.Const -> cont 36;
-	lexer.Type -> cont 37;
+	Name happy_dollar_dollar -> cont 13;
+	Int happy_dollar_dollar -> cont 14;
+	Bool -> cont 15;
+	Let -> cont 16;
+	In -> cont 17;
+	If -> cont 18;
+	Then -> cont 19;
+	Else -> cont 20;
+	LParen -> cont 21;
+	RParen -> cont 22;
+	Equals -> cont 23;
+	Eq -> cont 24;
+	And -> cont 25;
+	Or -> cont 26;
+	Plus -> cont 27;
+	Minus -> cont 28;
+	Plusplus -> cont 29;
+	Minusminus -> cont 30;
+	Mult -> cont 31;
+	Divide -> cont 32;
+	Comma -> cont 33;
+	True -> cont 34;
+	False -> cont 35;
+	Const -> cont 36;
+	Type -> cont 37;
 	_ -> happyError' ((tk:tks), [])
 	}
 
@@ -630,7 +630,7 @@ happyReturn1 :: () => a -> b -> HappyIdentity a
 happyReturn1 = \a tks -> (Prelude.return) a
 happyError' :: () => ([(Token)], [Prelude.String]) -> HappyIdentity a
 happyError' = HappyIdentity Prelude.. (\(tokens, _) -> parseError tokens)
-Parser tks = happyRunIdentity happySomeParser where
+parser tks = happyRunIdentity happySomeParser where
  happySomeParser = happyThen (happyParse action_0 tks) (\x -> case x of {HappyAbsSyn4 z -> happyReturn z; _other -> notHappyAtAll })
 
 happySeq = happyDontSeq

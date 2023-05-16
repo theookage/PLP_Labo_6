@@ -5,12 +5,12 @@ type Name = String
 data Spec 
     = Decl Decl 
     | Expr Expr
-    deriving Show 
+    deriving (Show) 
 
 data Decl 
     = VarConst String Expr
     | Fct Type String [Expr]
-    deriving Show 
+    deriving (Show) 
 
 data Expr
     = Litteral Type Litteral
@@ -20,22 +20,22 @@ data Expr
     | Pattern Expr
     | OperatorUnary OperatorUn Expr
     | OperatorBinary OperatorBi Expr Expr
-    deriving Show
+    deriving (Show)
 
 data OperatorUn 
     = PlusPlus | MinusMinus
-    deriving Show
+    deriving (Show)
 
 data OperatorBi =
     Equals | Or | And | Plus | Minus | Mult | Divide
-    deriving Show 
+    deriving (Show) 
 
 
 data Type = TypeBool | TypeInt 
-    deriving Show
+    deriving (Show)
 
 data Litteral 
     = LBool Bool
     | LInt Int 
     | LTuples [Expr]
-    deriving Show 
+    deriving (Show) 

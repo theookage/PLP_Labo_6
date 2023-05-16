@@ -25,6 +25,8 @@ tokens :-
     "/"                { \_ -> Divide }
     "("                { \_ -> LParen }
     ")"                { \_ -> RParen }
+    "||"               { \_ -> Or}
+    "&&"               { \_ -> And}
     "="                { \_ -> Eq}
     ","                { \_ -> Comma }
     "if"               { \_ -> If }
@@ -56,6 +58,8 @@ data Token
   | Else
   | Equals              -- Opérateur d'égalité
   | Eq
+  | Or 
+  | And
   | Plus                -- Opérateur d'addition
   | Minus               -- Opérateur de soustraction
   | Mult               -- Opérateur de multiplication
