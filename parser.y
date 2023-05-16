@@ -4,11 +4,11 @@
 }
 
 %name Parser
-%tekentype { Token }
+%tokentype { Token }
 %error { parseError }
 
 %token
-    var      {lexer.Var $$}
+    name     {lexer.name $$}
     int      {lexer.Int $$}
     bool     {lexer.Bool}
     let      {lexer.Let}
@@ -19,49 +19,68 @@
     '('      {lexer.LParen}
     ')'      {lexer.RParen}
     '=='     {lexer.Equals}
+    '&&'     {lexer.And}
+    '||'     {lexer.Or}
     '+'      {lexer.Plus}
     '-'      {lexer.Minus}
     '++'     {lexer.Plusplus}
     '--'     {lexer.Minusminus}
     '*'      {lexer.Mult}
     '/'      {lexer.Divide}
+    ','      {lexer.Comma}
+    true     {lexer.True}
+    false    {lexer.False}
+    const    {lexer.Const}
 
 
 %%
 
-Spec : Decl {}
-     | Expr {}
+Spec : Decl {Decl $1}
+     | Express  {Expr $1}
 
-Exp : let var '=' Exp in Exp {Let $2 $4 $6}
-    | Exp1                   { Expr $1 }
+Decl : const name '=' Expr {VarConst $2 $4}
+     | fct Type name '(' Tuples ')' {Fct $2 $3 $5}
+     | fct Type name '('')'         {Fct $2 [] $5}
 
-Expr : Factor {Factor $1}
-     | Reference symbole
-     | Application Fonction
+Expr    : Factor             {Factor $1}
+        | name               {Ref $1}
+        | fct '(' Tuples ')' {AppFonction $2 $4}
+        | Parenth            {$1}
 
-IfThenElse : if 
+
+Parenth : '(' Express ')' {Parenth $2}
+        | '(' Cond ')'    {Parenth $2}
 
 
-Exp : '(' Tuples ')' {Tuples $2}
-    | Expr      {Expr $2}
+Exp : let name '=' Exp in Exp {Let $2 $4 $6}
+    | Expr                   { Expr $1 }
+
+IfThenElse : if '(' Cond ')' then smth {If $3 $6}
+           | if '(' Cond ')' then smth else smthelse {If $3 $6 $8}
+
+Cond : Cond '||' Cond {Or $1 $3}
+     | Cond '&&' Cond {And $1 $3}
+     | Cond '==' Cond {Equals $1 $3}
+     | true           {Bool $1}
+     | false          {Bool $1}
+     | Factor         {Factor $1}
 
 Tuples : Tuples ',' Expr {Expr $3}
-       | Expr {Expr $3}
+       | Expr {Expr $1}
 
-Expr : Expr '+' Term {Plus $1 $3}
-     | Expr '-' Term {Minus $1 $3}
-     | Term          {Term $1}
+Term : Term '+' Term {Plus $1 $3}
+     | Term '-' Term {Minus $1 $3}
+     | Term '*' Term {Mult $1 $3}
+     | Term '/' Term {Div $1 $3}
+     | Factor '++'   {Plusplus $1}
+     | Factor '--'   {MinusMinus $1}
+     | Factor        {Factor $1}
 
-Term : Term '*' Factor {Mult $1 $3}
-     | Term '/' Factor {Div $1 $3}
-     | Factor '++'     {Plusplus $1}
-     | Factor '--'     {MinusMinus}
-     | Factor          {Factor $1}
+Lit : Factor {Factor $1}
+    | '(' Tuples ')' {Tuples $1}
 
 Factor : int {Int $1}
-       | var {Var $1}
        | bool {Bool $1}
-       | '(' Expr ')' {}
 
 
 
@@ -70,23 +89,30 @@ Factor : int {Int $1}
         parseError _ = error "parsing error"
     }
 
+Type Name = String
 
 data Spec 
-    = Decl
-    | Expr
+    = Decl declaration 
+    | Expr expression
+    deriving (Show)
 
 data Decl 
-    = Var
-    | fonc
+    = Var Const (Name) 
+    | Fct Type [Expr]
 
 data Expr
-    = Lit
-    | Ref
-    | App
+    = Litteral 
+    | Ref String
+    | AppFonction
     | Brack
-    | Loc
-    | Pat
-    | Op
+    | Let 
+    | Pattern
+    | OpUnair Expr
+    | OpBin Expr Expr 
+    | OpComp Expr Expr 
+
+
+
 
 data Lit
     = 

@@ -1,15 +1,48 @@
 {
-module Main (main) where
+module Lexer (lexer, Token(..)) where
 }
+
 
 %wrapper "basic"
 
+-- Définition de la grammaire lexicale avec Alex
+
+
+  $digit = 0-9
+  $alpha = [a-zA-Z]
+
+tokens :-
+  -- Règles pour les tokens
+    "let"              { \_ -> Let }
+    "in"               { \_ -> In }
+    "=="               { \_ -> Equals }
+    "+"                { \_ -> Plus }
+    "-"                { \_ -> Minus }
+    "++"               { \_ -> Plusplus}
+    int | bool         { \_ -> Type}
+    "--"               {\_ -> MinusMinus}
+    "*"                { \_ -> Mult }
+    "/"                { \_ -> Divide }
+    "("                { \_ -> LParen }
+    ")"                { \_ -> RParen }
+    ","                { \_ -> Comma }
+    "if"               { \_ -> If }
+    "then"             { \_ -> Then }
+    "else"             { \_ -> Else }
+    "->"               { \_ -> FunArrow }
+    $alpha([$alpha$digit]*) { \s -> Name s }
+    $digit            { \s -> Int (read s) }
+    "True"             { \_ -> Bool True }
+    "False"            { \_ -> Bool False }
+    "Const"            { \_ -> Const}
+{
+
 -- Définition du type de données pour les tokens
 data Token
-  = Var String          -- Variable constante
-  | Int Int         -- Littéral entier
+  = Name String         
+  | Int Int             -- Littéral entier
   | Bool Bool           -- Littéral booléen
-  | Tuple           -- Fin de tuple
+  | Comma               -- Virgule
   | FunArrow            -- Flèche de fonction
   | Symbol String       -- Référence à des symboles
   | App                 -- Application de fonctions
@@ -27,40 +60,10 @@ data Token
   | Divide              -- Opérateur de division
   | Plusplus            -- Opérateur d'incrément
   | Minusminus          -- Opérateur de décrément
+  | Const 
+  | Type
+
   deriving (Eq, Show)
 
--- Définition de la grammaire lexicale avec Alex
-tokens :-
-
-  $white+  ;
-  $digit = 0-9
-  $alpha = [a-zA-Z]
-
-  -- Règles pour les tokens
-  {
-    "let"              { \_ -> Let }
-    "in"               { \_ -> In }
-    "=="               { \_ -> Equals }
-    "+"                { \_ -> Plus }
-    "-"                { \_ -> Minus }
-    "++"               { \_ -> Plusplus}
-    "--"               {\_ -> MinusMinus}
-    "*"                { \_ -> Mult }
-    "/"                { \_ -> Divide }
-    "("                { \_ -> LParen }
-    ")"                { \_ -> RParen }
-    ","                { \_ -> Tuple }
-    "if"               { \_ -> If }
-    "then"             { \_ -> Then }
-    "else"             { \_ -> Else }
-    "->"               { \_ -> FunArrow }
-    $alpha([$alpha$digit']*) { \s -> Var s }
-    $digit+            { \s -> Int (read s) }
-    "True"             { \_ -> Bool True }
-    "False"            { \_ -> Bool False }
-
-
-main = do
-  s <- getContents
-  print (alexScanTokens s)
+lexer = alexScanTokens
 }
