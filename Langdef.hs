@@ -2,7 +2,7 @@
 
 module Langdef where
 
-type Name = String
+--type Name = String
 
 data Spec 
     = Decl Decl 
@@ -20,9 +20,17 @@ data Expr
     | AppFonction String [Expr]
     | Let String Expr Expr
     | Parenth [Expr]
-    -- | Pattern Expr
+    | IfThen Expr Expr
+    | IfThenElse Expr Expr Expr
+    | Pattern Expr [(Pattern, Expr)]
     | OperatorUnary OperatorUn Expr
     | OperatorBinary OperatorBi Expr Expr
+    deriving (Show)    
+
+data Pattern
+    = PatternName String
+    | PatternLitt Litteral
+    | PatternUniverse
     deriving (Show)
 
 data OperatorUn 

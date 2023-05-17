@@ -20,9 +20,12 @@ tokens :-
     "+"                { \_ -> Plus }
     "-"                { \_ -> Minus }
     "++"               { \_ -> Plusplus}
+    "case"             { \_ -> Case}
+    "of"               { \_ -> Of}
     "int"              { \_ -> TInt}
     "bool"             { \_ -> TBool}
-    "--"               {\_ -> Minusminus}
+    "--"               { \_ -> Minusminus }
+    "_"                { \_ -> Universal }
     "*"                { \_ -> Mult }
     "/"                { \_ -> Divide }
     "("                { \_ -> LParen }
@@ -36,7 +39,7 @@ tokens :-
     "if"               { \_ -> If }
     "then"             { \_ -> Then }
     "else"             { \_ -> Else }
-    "->"               { \_ -> FunArrow }
+    "->"               { \_ -> Arrow }
     $alpha([$alpha$digit]*) { \s -> Name s }
     $digit            { \s -> Int (read s) }
     "const"            { \_ -> Const }
@@ -45,31 +48,35 @@ tokens :-
 -- Définition du type de données pour les tokens
 data Token
   = Name String         
-  | Int Int             -- Littéral entier
-  | Bool Bool           -- Littéral booléen
-  | Comma               -- Virgule
-  | FunArrow            -- Flèche de fonction
-  | Symbol String       -- Référence à des symboles
-  | App                 -- Application de fonctions
-  | LParen              -- Parenthèse ouvrante
-  | RParen              -- Parenthèse fermante
-  | Let                 -- Mot-clé "let"
-  | In                  -- Mot-clé "in"
+  | Int Int            
+  | Bool Bool         
+  | Comma              
+  | FunArrow          
+  | Symbol String       
+  | App                
+  | LParen             
+  | RParen            
+  | Let                
+  | In                 
   | If
   | Then 
   | Else
-  | Equals              -- Opérateur d'égalité
+  | Equals             
   | Eq
+  | Case 
+  | Of
+  | Universal
   | LAcol
   | RAcol
   | Or 
   | And
-  | Plus                -- Opérateur d'addition
-  | Minus               -- Opérateur de soustraction
-  | Mult               -- Opérateur de multiplication
-  | Divide              -- Opérateur de division
-  | Plusplus            -- Opérateur d'incrément
-  | Minusminus          -- Opérateur de décrément
+  | Arrow
+  | Plus                
+  | Minus               
+  | Mult             
+  | Divide              
+  | Plusplus            
+  | Minusminus          
   | Const 
   | TInt
   | TBool
