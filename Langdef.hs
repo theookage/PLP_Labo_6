@@ -13,13 +13,14 @@ data Decl
     deriving (Show) 
 
 data Expr
-    = Litteral Type Litteral
+    = Litteral Litteral
     | Ref String
     | AppFonction String [Expr]
     | Let String Expr Expr
+    | Parenth [Expr]
     -- | Pattern Expr
-    | OperatorUnary OperatorUn Litteral
-    | OperatorBinary OperatorBi Litteral Litteral
+    | OperatorUnary OperatorUn Expr
+    | OperatorBinary OperatorBi Expr Expr
     deriving (Show)
 
 data OperatorUn 

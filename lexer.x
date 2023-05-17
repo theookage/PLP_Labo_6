@@ -1,5 +1,5 @@
 {
-module Lexer (lexer, Token(..)) where
+module Lexer where
 }
 
 
@@ -19,9 +19,8 @@ tokens :-
     "+"                { \_ -> Plus }
     "-"                { \_ -> Minus }
     "++"               { \_ -> Plusplus}
-    int | bool         { \_ -> Type}
-    'int'              { \_ -> TInt}
-    'bool'             { \_ -> TBool}
+    "int"              { \_ -> TInt}
+    "bool"             { \_ -> TBool}
     "--"               {\_ -> Minusminus}
     "*"                { \_ -> Mult }
     "/"                { \_ -> Divide }
@@ -67,7 +66,6 @@ data Token
   | Plusplus            -- Opérateur d'incrément
   | Minusminus          -- Opérateur de décrément
   | Const 
-  | Type
   | TInt
   | TBool
 
