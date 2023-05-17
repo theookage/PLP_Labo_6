@@ -55,7 +55,7 @@ Spec : Decl                         {Langdef.Decl $1}
      | Expr                         {Langdef.Expr $1}
 
 Decl : 'const' name '=' Expr        {Langdef.VarConst $2 $4}
-     | Type name '(' Arg ')'        {Langdef.Fct $1 $2 $4}
+     | Type name '(' Param ')'        {Langdef.Fct $1 $2 $4}
 
 Expr    : name                       {Langdef.Ref $1}
         | let name '=' Expr in Expr  {Langdef.Let $2 $4 $6}
@@ -67,6 +67,8 @@ Expr    : name                       {Langdef.Ref $1}
         | Op                         {$1}
         | Lit                        {Langdef.Litteral $1}
 
+Param :  Type name {[($1, $2)]}
+      |  Type name ',' Param {($1, $2):$4}
 
 Patterns : Pattern                  { [$1]  }
          | Pattern Patterns         { $1:$2 }

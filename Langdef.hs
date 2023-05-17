@@ -11,7 +11,7 @@ data Spec
 
 data Decl 
     = VarConst String Expr
-    | Fct Type String [Expr]
+    | Fct Type String [(Type, String)]
     deriving (Show) 
 
 data Expr
