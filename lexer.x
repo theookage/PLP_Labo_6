@@ -1,3 +1,4 @@
+-- Auteur Théo Coutaudier et Jérémie Santoro
 {
 module Lexer where
 }
@@ -26,9 +27,11 @@ tokens :-
     "/"                { \_ -> Divide }
     "("                { \_ -> LParen }
     ")"                { \_ -> RParen }
-    "||"               { \_ -> Or}
-    "&&"               { \_ -> And}
-    "="                { \_ -> Eq}
+    "{"                { \_ -> LAcol }
+    "}"                { \_ -> RAcol }
+    "||"               { \_ -> Or }
+    "&&"               { \_ -> And }
+    "="                { \_ -> Eq }
     ","                { \_ -> Comma }
     "if"               { \_ -> If }
     "then"             { \_ -> Then }
@@ -36,7 +39,7 @@ tokens :-
     "->"               { \_ -> FunArrow }
     $alpha([$alpha$digit]*) { \s -> Name s }
     $digit            { \s -> Int (read s) }
-    "Const"            { \_ -> Const}
+    "const"            { \_ -> Const }
 {
 
 -- Définition du type de données pour les tokens
@@ -57,6 +60,8 @@ data Token
   | Else
   | Equals              -- Opérateur d'égalité
   | Eq
+  | LAcol
+  | RAcol
   | Or 
   | And
   | Plus                -- Opérateur d'addition

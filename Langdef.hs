@@ -1,3 +1,5 @@
+-- Théo Coutaudier et Jérémie Santoro
+
 module Langdef where
 
 type Name = String

@@ -1,3 +1,4 @@
+-- Auteur Théo Coutaudier et Jérémie Santoro
 {
 module Parser  where 
 import Lexer
@@ -19,6 +20,8 @@ import qualified Langdef
     -- else     {Else}
     '('      {LParen}
     ')'      {RParen}
+    '{'      {LAcol}
+    '}'      {RAcol} 
     '=='     {Equals}
     '='      {Eq}
     '&&'     {And}
@@ -70,12 +73,13 @@ Type : 'int' {Langdef.TypeInt}
      | 'bool' {Langdef.TypeBool}
 
 Lit : Factor         {$1}
-    | '(' Tuples ')' {Langdef.LTuples $2}
+    | '{' Tuples '}' {Langdef.LTuples $2}
 
 Tuples :    Expr ',' Expr {[$1]++[$3]}
        |    Expr ',' Tuples {$1:$3}
 
 Factor : int  {Langdef.LInt $1}
+       | '-' int {Langdef.LInt $2}
        | bool {Langdef.LBool $1}
 {
     parseError :: [Token] -> a
