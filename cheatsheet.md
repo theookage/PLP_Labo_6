@@ -28,7 +28,9 @@ Expression :
         - Exemple : x
 
     - Litteraux Entier, Bouléen ou Tuples : 
-        - Tuples avec accolade, minimum 2 éléments
+        - Type possible int, bool, tuples
+        - Tuples entre accolade, séparé par des , minimum 2 éléments
+        - int négatif possible avec le symbole - 
         - Exemple : 42, True, {2, True} 
 
     - Application de fonction : 
