@@ -62,8 +62,22 @@ Expression :
         - Exemple : case x of (42 -> True) (_, False)  
 
     - Déclaration locale avec un corps : 
-        - 
+        - let name = expr1 in expr2 -> name = string nom de la déclaration
+                                    -> expr1 expr2 = des Expressions 
+        - Exemple : let x = 42 in x + y
+    
+    - Opération Unaire : 
+        - expr op   -> expr = une Expression 
+                    -> op = opéarteur unaire: ++, --
+        - Exemple : 42++
 
+    - Opérateur Binaire : 
+        - expr1 op expr2    -> expr1 et expr2 = des Expression 
+                            -> op = opérateur 
+                            -> opérateur arythmétique: +, -, /, *
+                            -> opérateur conditionnel: ||, &&, ==
+        - Exemple : 42 + 45
+        - Exemple : True || False 
 
 
 
