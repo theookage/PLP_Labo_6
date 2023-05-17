@@ -16,10 +16,10 @@ data Expr
     = Litteral Type Litteral
     | Ref String
     | AppFonction String [Expr]
-    | Let [Decl] Expr
-    | Pattern Expr
-    | OperatorUnary OperatorUn Expr
-    | OperatorBinary OperatorBi Expr Expr
+    | Let String Expr Expr
+    -- | Pattern Expr
+    | OperatorUnary OperatorUn Litteral
+    | OperatorBinary OperatorBi Litteral Litteral
     deriving (Show)
 
 data OperatorUn 
@@ -31,7 +31,7 @@ data OperatorBi =
     deriving (Show) 
 
 
-data Type = TypeBool | TypeInt 
+data Type = TypeBool | TypeInt | TypeTuples
     deriving (Show)
 
 data Litteral 

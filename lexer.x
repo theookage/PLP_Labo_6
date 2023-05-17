@@ -20,6 +20,8 @@ tokens :-
     "-"                { \_ -> Minus }
     "++"               { \_ -> Plusplus}
     int | bool         { \_ -> Type}
+    'int'              { \_ -> TInt}
+    'bool'             { \_ -> TBool}
     "--"               {\_ -> Minusminus}
     "*"                { \_ -> Mult }
     "/"                { \_ -> Divide }
@@ -35,8 +37,6 @@ tokens :-
     "->"               { \_ -> FunArrow }
     $alpha([$alpha$digit]*) { \s -> Name s }
     $digit            { \s -> Int (read s) }
-    "True"             { \_ -> Bool True }
-    "False"            { \_ -> Bool False }
     "Const"            { \_ -> Const}
 {
 
@@ -68,6 +68,8 @@ data Token
   | Minusminus          -- Opérateur de décrément
   | Const 
   | Type
+  | TInt
+  | TBool
 
   deriving (Eq, Show)
 
