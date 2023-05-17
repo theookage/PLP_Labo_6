@@ -6,14 +6,10 @@ module Lexer where
 
 %wrapper "basic"
 
--- Définition de la grammaire lexicale avec Alex
-
-
   $digit = 0-9
   $alpha = [a-zA-Z]
 
 tokens :-
-  -- Règles pour les tokens
     "let"              { \_ -> Let }
     "in"               { \_ -> In }
     "=="               { \_ -> Equals }
@@ -45,7 +41,6 @@ tokens :-
     "const"            { \_ -> Const }
 {
 
--- Définition du type de données pour les tokens
 data Token
   = Name String         
   | Int Int            

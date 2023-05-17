@@ -1,4 +1,4 @@
--- Théo Coutaudier et Jérémie Santoro
+-- Auteur Théo Coutaudier et Jérémie Santoro
 
 module Langdef where
 
