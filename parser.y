@@ -9,6 +9,13 @@ import qualified Langdef
 %tokentype { Token }
 %error { parseError }
 
+%left '+' '-'
+%left '*' '/'
+%left '||' '&&' '=='
+%right '++' '--'
+%nonassoc in
+
+
 %token
     name     {Name $$}
     int      {Int $$}
